@@ -7,15 +7,22 @@
 -- specified the terms in the file COPYING in this
 -- distribution.
 
--- Photo Gallery in Yesod, with persistence, versioning and
--- archivable metadata. Work in progress.
+{-# LANGUAGE TemplateHaskell #-}
+{-# LANGUAGE TypeFamilies #-}
+{-# LANGUAGE OverloadedStrings #-}
 
-module Main where
+module Dispatch where
 
+import Data.Default
 import Yesod
+import Yesod.Default.Util
 
-import Dispatch ()
 import Foundation
 
-main :: IO ()
-main = warpEnv App
+mkYesodDispatch "App" resourcesApp
+
+getHomeR :: Handler Html
+getHomeR =
+    defaultLayout $ do
+      setTitle "Galleries"
+      $(widgetFileNoReload def "home")

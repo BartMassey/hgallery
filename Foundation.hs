@@ -7,15 +7,14 @@
 -- specified the terms in the file COPYING in this
 -- distribution.
 
--- Photo Gallery in Yesod, with persistence, versioning and
--- archivable metadata. Work in progress.
+{-# LANGUAGE TemplateHaskell #-}
+{-# LANGUAGE TypeFamilies #-}
 
-module Main where
+module Foundation where
 
 import Yesod
 
-import Dispatch ()
-import Foundation
+data App = App
+instance Yesod App
 
-main :: IO ()
-main = warpEnv App
+mkYesodData "App" $(parseRoutesFile "config/routes")
