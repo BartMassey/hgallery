@@ -13,6 +13,8 @@
 
 module Handler.Home where
 
+import Data.Text (unpack)
+
 import Data.Default
 import Yesod
 import Yesod.Default.Util
@@ -21,7 +23,20 @@ import Foundation
 
 getHomeR :: Handler Html
 getHomeR = do
+  (formWidget, formEncType) <- generateFormPost uploadForm
   galleries <- getList
   defaultLayout $ do
     setTitle "HGallery"
     $(widgetFileNoReload def "home")
+
+postHomeR :: Handler Html
+postHomeR = do
+  ((result, _), _) <- runFormPost uploadForm
+  case result of
+    FormSuccess fi -> do
+      app <- getYesod
+      addFile app $ unpack $ fileName fi
+    _ -> return ()
+  redirect HomeR
+
+uploadForm = renderDivs $ fileAFormReq "file"

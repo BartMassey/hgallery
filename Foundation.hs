@@ -9,6 +9,7 @@
 
 {-# LANGUAGE TemplateHaskell #-}
 {-# LANGUAGE TypeFamilies #-}
+{-# LANGUAGE MultiParamTypeClasses #-}
 
 module Foundation where
 
@@ -18,6 +19,9 @@ import Yesod
 
 data App = App (TVar [String])
 instance Yesod App
+
+instance RenderMessage App FormMessage where
+    renderMessage _ _ = defaultFormMessage
 
 mkYesodData "App" $(parseRoutesFile "config/routes")
 
