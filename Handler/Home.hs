@@ -21,6 +21,7 @@ import Foundation
 
 getHomeR :: Handler Html
 getHomeR = do
-    defaultLayout $ do
-        setTitle "Galleries"
-        $(widgetFileNoReload def "home")
+  galleries <- getList
+  defaultLayout $ do
+    setTitle "HGallery"
+    $(widgetFileNoReload def "home")

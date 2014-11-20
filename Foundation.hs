@@ -14,7 +14,12 @@ module Foundation where
 
 import Yesod
 
-data App = App
+data App = App [String]
 instance Yesod App
 
 mkYesodData "App" $(parseRoutesFile "config/routes")
+
+getList :: Handler [String]
+getList = do
+  App state <- getYesod
+  return state

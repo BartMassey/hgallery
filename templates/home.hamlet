@@ -1,1 +1,7 @@
-<h2>Galleries
+$if null galleries
+    <p>No galleries yet.
+$else
+    <h2>Galleries
+    <ul>
+        $forall gallery <- galleries
+            <li>#{gallery}

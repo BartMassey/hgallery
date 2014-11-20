@@ -18,4 +18,4 @@ import Dispatch ()
 import Foundation
 
 main :: IO ()
-main = warpEnv App
+main = warpEnv $ App []
