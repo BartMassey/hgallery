@@ -12,10 +12,14 @@
 
 module Main where
 
+import Control.Concurrent.STM
+
 import Yesod
 
 import Dispatch ()
 import Foundation
 
 main :: IO ()
-main = warpEnv $ App []
+main = do
+  galleries <- atomically $ newTVar []
+  warpEnv $ App galleries

@@ -12,9 +12,11 @@
 
 module Foundation where
 
+import Control.Concurrent.STM
+
 import Yesod
 
-data App = App [String]
+data App = App (TVar [String])
 instance Yesod App
 
 mkYesodData "App" $(parseRoutesFile "config/routes")
@@ -22,4 +24,9 @@ mkYesodData "App" $(parseRoutesFile "config/routes")
 getList :: Handler [String]
 getList = do
   App state <- getYesod
-  return state
+  liftIO $ readTVarIO state
+
+addFile :: App -> String -> Handler ()
+addFile (App state) op =
+    liftIO $ atomically $
+      modifyTVar state (op :)
