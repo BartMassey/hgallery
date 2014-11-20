@@ -17,21 +17,19 @@
 
 module Main where
 
+import Data.Default
 import Yesod
+import Yesod.Default.Util
 
 data App = App
 instance Yesod App
 
-mkYesod "App" [parseRoutes|
-/ HomeR GET
-|]
+mkYesod "App" $(parseRoutesFile "config/routes")
 
 getHomeR :: Handler Html
 getHomeR = defaultLayout $ do
     setTitle "HGallery"
-    toWidget [whamlet|
-<h2>Photos
-|]
+    $(widgetFileNoReload def "home")
 
 main :: IO ()
 main = warpEnv App
