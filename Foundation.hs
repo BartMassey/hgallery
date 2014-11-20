@@ -8,6 +8,7 @@
 -- distribution.
 
 {-# LANGUAGE TemplateHaskell #-}
+{-# LANGUAGE QuasiQuotes #-}
 {-# LANGUAGE TypeFamilies #-}
 {-# LANGUAGE MultiParamTypeClasses #-}
 {-# LANGUAGE ViewPatterns #-}
@@ -19,13 +20,21 @@ import Control.Concurrent.STM
 import Data.ByteString.Lazy (ByteString)
 import Data.List (find)
 
+import Data.Default
+import Text.Hamlet
 import Yesod
+import Yesod.Default.Util
 
 data FileAssoc = FileAssoc { fileAssocName :: String,
                              fileAssocContents :: ByteString }
 
 data App = App (TVar [FileAssoc])
-instance Yesod App
+
+instance Yesod App where
+  defaultLayout widget = do
+    let wf = $(widgetFileNoReload def "default-layout")
+    pageContent <- widgetToPageContent wf
+    withUrlRenderer $(hamletFile "templates/default-layout-wrapper.hamlet")
 
 instance RenderMessage App FormMessage where
     renderMessage _ _ = defaultFormMessage
