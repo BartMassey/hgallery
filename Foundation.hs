@@ -10,14 +10,21 @@
 {-# LANGUAGE TemplateHaskell #-}
 {-# LANGUAGE TypeFamilies #-}
 {-# LANGUAGE MultiParamTypeClasses #-}
+{-# LANGUAGE ViewPatterns #-}
+{-# LANGUAGE OverloadedStrings #-}
 
 module Foundation where
 
 import Control.Concurrent.STM
+import Data.ByteString.Lazy (ByteString)
+import Data.List (find)
 
 import Yesod
 
-data App = App (TVar [String])
+data FileAssoc = FileAssoc { fileAssocName :: String,
+                             fileAssocContents :: ByteString }
+
+data App = App (TVar [FileAssoc])
 instance Yesod App
 
 instance RenderMessage App FormMessage where
@@ -25,12 +32,21 @@ instance RenderMessage App FormMessage where
 
 mkYesodData "App" $(parseRoutesFile "config/routes")
 
-getList :: Handler [String]
-getList = do
+getFilenamesList :: Handler [String]
+getFilenamesList = do
   App state <- getYesod
-  liftIO $ readTVarIO state
+  filesList <- liftIO $ readTVarIO state
+  return $ map fileAssocName filesList
 
-addFile :: App -> String -> Handler ()
+addFile :: App -> FileAssoc -> Handler ()
 addFile (App state) op =
     liftIO $ atomically $
       modifyTVar state (op :)
+
+getByFilename :: String -> Handler ByteString
+getByFilename filename = do
+  App state <- getYesod
+  fileAssocs <- liftIO $ readTVarIO state
+  case find ((== filename) . fileAssocName) fileAssocs of
+    Just (FileAssoc { fileAssocContents = bytes }) -> return bytes
+    _ -> notFound

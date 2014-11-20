@@ -13,6 +13,9 @@
 
 module Handler.Home where
 
+import Control.Monad.Trans.Resource
+import Data.Conduit
+import Data.Conduit.Binary
 import Data.Text (unpack)
 
 import Data.Default
@@ -24,7 +27,7 @@ import Foundation
 getHomeR :: Handler Html
 getHomeR = do
   (formWidget, formEncType) <- generateFormPost uploadForm
-  galleries <- getList
+  galleries <- getFilenamesList
   defaultLayout $ do
     setTitle "HGallery"
     $(widgetFileNoReload def "home")
@@ -35,7 +38,10 @@ postHomeR = do
   case result of
     FormSuccess fi -> do
       app <- getYesod
-      addFile app $ unpack $ fileName fi
+      fileBytes <- runResourceT $ fileSource fi $$ sinkLbs
+      let fileAssoc = FileAssoc { fileAssocName = unpack $ fileName fi,
+                                  fileAssocContents = fileBytes }
+      addFile app fileAssoc
     _ -> return ()
   redirect HomeR
 

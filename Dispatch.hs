@@ -10,6 +10,7 @@
 {-# LANGUAGE TemplateHaskell #-}
 {-# LANGUAGE TypeFamilies #-}
 {-# LANGUAGE OverloadedStrings #-}
+{-# LANGUAGE ViewPatterns #-}
 
 module Dispatch where
 
@@ -19,5 +20,6 @@ import Yesod.Default.Util ()
 
 import Foundation
 import Handler.Home
+import Handler.Stats
 
 mkYesodDispatch "App" resourcesApp

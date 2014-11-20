@@ -4,7 +4,8 @@ $else
     <h2>Galleries
     <ul>
         $forall gallery <- galleries
-            <li>#{gallery}
+            <li>
+                <a href=@{StatsR gallery}>#{gallery}
 
 <h2>Submit new file
 <form method=post action=@{HomeR} enctype=#{formEncType}>
