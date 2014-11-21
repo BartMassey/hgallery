@@ -1,7 +1,14 @@
 Copyright © 2014 Bart Massey
-Based on material Copyright © 2013 School of Haskell
+
+Much of this is based on material
+
+Copyright © 2013 School of Haskell
 https://www.fpcomplete.com/school/advanced-haskell/
   building-a-file-hosting-service-in-yesod
+
+The School of Haskell material is apparently made available
+under a 3-Clause BSD license, according to their Terms of
+Service as of 21 November 2014.
 
 This work is made available under the "GNU Affero General
 Public License, version 3".
