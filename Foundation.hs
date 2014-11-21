@@ -21,6 +21,8 @@ import Data.ByteString.Lazy (ByteString)
 import Data.List (find)
 
 import Data.Default
+import Data.Map (Map)
+import qualified Data.Map as M
 import Text.Hamlet
 import Yesod
 import Yesod.Default.Util
@@ -30,7 +32,7 @@ data FileAssoc = FileAssoc { fileAssocId :: Int,
                              fileAssocContents :: ByteString }
 
 data App = App { appNextId :: TVar Int,
-                 appGalleries :: TVar [FileAssoc] }
+                 appGalleries :: TVar (Map Int FileAssoc) }
 
 instance Yesod App where
   defaultLayout widget = do
@@ -46,26 +48,21 @@ mkYesodData "App" $(parseRoutesFile "config/routes")
 getFAList :: Handler [FileAssoc]
 getFAList = do
   state <- getYesod
-  liftIO $ readTVarIO $ appGalleries state
+  galleryMap <- liftIO $ readTVarIO $ appGalleries state
+  return $ M.elems galleryMap
 
 addFile :: App -> FileAssoc -> Handler ()
 addFile state op = do
   faid <- getNextId state
   let op' = op { fileAssocId = faid }
   liftIO $ atomically $
-    modifyTVar (appGalleries state) (op' :)
-
-getByFilename :: String -> Handler FileAssoc
-getByFilename = getByField fileAssocName
+    modifyTVar (appGalleries state) (M.insert faid op')
 
 getById :: Int -> Handler FileAssoc
-getById = getByField fileAssocId
-
-getByField :: Eq a => (FileAssoc -> a) -> a -> Handler FileAssoc
-getByField field target = do
+getById faid = do
   state <- getYesod
   fileAssocs <- liftIO $ readTVarIO $ appGalleries state
-  case find ((== target) . field) fileAssocs of
+  case M.lookup faid fileAssocs of
     Just fa -> return fa
     _ -> notFound
 

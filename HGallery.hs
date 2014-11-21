@@ -13,6 +13,7 @@
 module Main where
 
 import Control.Concurrent.STM
+import qualified Data.Map as M
 
 import Yesod
 
@@ -21,6 +22,6 @@ import Foundation
 
 main :: IO ()
 main = do
-  galleries <- atomically $ newTVar []
+  galleries <- atomically $ newTVar $ M.empty
   nextId <- atomically $ newTVar 100000
   warpEnv $ App nextId galleries
