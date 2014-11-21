@@ -42,7 +42,7 @@ postHomeR = do
       let fileAssoc = FileAssoc { fileAssocName = unpack $ fileName fi,
                                   fileAssocContents = fileBytes,
                                   fileAssocMime = unpack $ fileContentType fi,
-                                  fileAssocId = undefined }
+                                  fileAssocId = 0 }
       addFile app fileAssoc
     _ -> return ()
   redirect HomeR

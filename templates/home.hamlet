@@ -8,6 +8,7 @@ $else
                 <ul>
                     <li>
                         <a href=@{StatsR faid}>Text
+                    <li>
                         <a href=@{RawR faid}>Raw
 
 <h2>Submit new file
