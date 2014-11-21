@@ -10,17 +10,20 @@
 {-# LANGUAGE TemplateHaskell #-}
 {-# LANGUAGE TypeFamilies #-}
 {-# LANGUAGE OverloadedStrings #-}
-{-# LANGUAGE ViewPatterns #-}
+{-# LANGUAGE QuasiQuotes #-}
 
-module Dispatch where
+module Handler.Raw where
 
-import Data.Default ()
+import Data.Text
+import Data.Text.Encoding
+
 import Yesod
-import Yesod.Default.Util ()
 
 import Foundation
-import Handler.Home
-import Handler.Stats
-import Handler.Raw
 
-mkYesodDispatch "App" resourcesApp
+getRawR :: Int -> Handler TypedContent
+getRawR faid = do
+  fa <- getById faid
+  let mime = encodeUtf8 $ pack $ fileAssocMime fa
+  let conts = toContent $ fileAssocContents fa
+  sendResponse (mime, conts)

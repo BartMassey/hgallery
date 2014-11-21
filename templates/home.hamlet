@@ -4,8 +4,11 @@ $else
     <h2>Galleries
     <ul>
         $forall (FileAssoc { fileAssocName = gallery, fileAssocId = faid }) <- galleries
-            <li>
-                <a href=@{StatsR faid}>#{gallery}
+            <li>#{gallery}
+                <ul>
+                    <li>
+                        <a href=@{StatsR faid}>Text
+                        <a href=@{RawR faid}>Raw
 
 <h2>Submit new file
 <form method=post action=@{HomeR} enctype=#{formEncType}>
