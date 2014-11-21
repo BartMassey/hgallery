@@ -3,9 +3,9 @@ $if null galleries
 $else
     <h2>Galleries
     <ul>
-        $forall gallery <- galleries
+        $forall (FileAssoc { fileAssocName = gallery, fileAssocId = faid }) <- galleries
             <li>
-                <a href=@{StatsR gallery}>#{gallery}
+                <a href=@{StatsR faid}>#{gallery}
 
 <h2>Submit new file
 <form method=post action=@{HomeR} enctype=#{formEncType}>

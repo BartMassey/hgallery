@@ -26,12 +26,13 @@ import Yesod.Default.Util
 
 import Foundation
 
-getStatsR :: String -> Handler Html
-getStatsR filename = do
-  bytes <- getByFilename filename
+getStatsR :: Int -> Handler Html
+getStatsR faid = do
+  fa <- getById faid
+  let filename = fileAssocName fa
   defaultLayout $ do
     setTitle . toMarkup $ "File Processor - " ++ filename
-    statsBlock <- liftIO $ stats bytes
+    statsBlock <- liftIO $ stats $ fileAssocContents fa
     $(widgetFileNoReload def "stats")
 
 stats :: LB.ByteString -> IO Widget

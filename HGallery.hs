@@ -22,4 +22,5 @@ import Foundation
 main :: IO ()
 main = do
   galleries <- atomically $ newTVar []
-  warpEnv $ App galleries
+  nextId <- atomically $ newTVar 100000
+  warpEnv $ App nextId galleries

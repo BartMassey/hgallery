@@ -27,7 +27,7 @@ import Foundation
 getHomeR :: Handler Html
 getHomeR = do
   (formWidget, formEncType) <- generateFormPost uploadForm
-  galleries <- getFilenamesList
+  galleries <- getFAList
   defaultLayout $ do
     setTitle "HGallery"
     $(widgetFileNoReload def "home")
@@ -40,7 +40,8 @@ postHomeR = do
       app <- getYesod
       fileBytes <- runResourceT $ fileSource fi $$ sinkLbs
       let fileAssoc = FileAssoc { fileAssocName = unpack $ fileName fi,
-                                  fileAssocContents = fileBytes }
+                                  fileAssocContents = fileBytes,
+                                  fileAssocId = undefined }
       addFile app fileAssoc
     _ -> return ()
   redirect HomeR
