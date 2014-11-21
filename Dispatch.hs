@@ -22,5 +22,6 @@ import Foundation
 import Handler.Home
 import Handler.Stats
 import Handler.Raw
+import Handler.Down
 
 mkYesodDispatch "App" resourcesApp

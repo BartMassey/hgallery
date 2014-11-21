@@ -12,8 +12,11 @@ TEMPLATES = templates/default-layout-wrapper.hamlet \
 	    templates/stats.hamlet templates/home.hamlet
 CONFIGS = config/routes
 
-HGallery: $(CORE) $(HANDLERS) $(TEMPLATES) $(CONFIGS)
+all:
 	$(MAKE) $(MFLAGS) clean
+	$(MAKE) $(MFLAGS) HGallery
+
+HGallery: $(CORE) $(HANDLERS) $(TEMPLATES) $(CONFIGS)
 	ghc -Wall --make HGallery.hs
 
 clean:

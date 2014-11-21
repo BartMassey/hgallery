@@ -1,3 +1,4 @@
 /               HomeR       GET POST
 /text/#Int      StatsR      GET
 /raw/#Int       RawR        GET
+/dl/#Int        DownR       GET

@@ -10,6 +10,8 @@ $else
                         <a href=@{StatsR faid}>Text
                     <li>
                         <a href=@{RawR faid}>Raw
+                    <li>
+                        <a href=@{DownR faid}>Download
 
 <h2>Submit new file
 <form method=post action=@{HomeR} enctype=#{formEncType}>
