@@ -41,6 +41,7 @@ postHomeR = do
       fileBytes <- runResourceT $ fileSource fi $$ sinkLbs
       let fileAssoc = FileAssoc { fileAssocName = unpack $ fileName fi,
                                   fileAssocContents = fileBytes,
+                                  fileAssocMime = unpack $ fileContentType fi,
                                   fileAssocId = undefined }
       addFile app fileAssoc
     _ -> return ()

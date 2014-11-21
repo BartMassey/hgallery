@@ -27,12 +27,13 @@ import Text.Hamlet
 import Yesod
 import Yesod.Default.Util
 
-data FileAssoc = FileAssoc { fileAssocId :: Int,
-                             fileAssocName :: String,
-                             fileAssocContents :: ByteString }
+data FileAssoc = FileAssoc { fileAssocId :: !Int,
+                             fileAssocName :: !String,
+                             fileAssocContents :: !ByteString,
+                             fileAssocMime :: !String }
 
-data App = App { appNextId :: TVar Int,
-                 appGalleries :: TVar (Map Int FileAssoc) }
+data App = App { appNextId :: !(TVar Int),
+                 appGalleries :: !(TVar (Map Int FileAssoc)) }
 
 instance Yesod App where
   defaultLayout widget = do
