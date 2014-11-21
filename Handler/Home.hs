@@ -39,9 +39,11 @@ postHomeR = do
     FormSuccess fi -> do
       app <- getYesod
       fileBytes <- runResourceT $ fileSource fi $$ sinkLbs
+      let mime = unpack $ fileContentType fi
       let fileAssoc = FileAssoc { fileAssocName = unpack $ fileName fi,
                                   fileAssocContents = fileBytes,
-                                  fileAssocMime = unpack $ fileContentType fi,
+                                  fileAssocMime = mime,
+                                  fileAssocType = parseFiletype mime,
                                   fileAssocId = 0 }
       addFile app fileAssoc
     _ -> return ()

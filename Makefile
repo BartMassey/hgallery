@@ -20,4 +20,5 @@ HGallery: $(CORE) $(HANDLERS) $(TEMPLATES) $(CONFIGS)
 	ghc -Wall --make HGallery.hs
 
 clean:
-	sh ./hsclean.sh *.hs Handler/*.hs
+	sh ./hsclean.sh
+	cd Handler && sh ../hsclean.sh

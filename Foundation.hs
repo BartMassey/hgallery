@@ -19,6 +19,7 @@ module Foundation where
 import Control.Concurrent.STM
 import Data.ByteString.Lazy (ByteString)
 
+import Data.Char
 import Data.Default
 import Data.Map (Map)
 import qualified Data.Map as M
@@ -26,10 +27,14 @@ import Text.Hamlet
 import Yesod
 import Yesod.Default.Util
 
+data Filetype = FiletypeText | FiletypeImage | FiletypeOther
+                deriving Eq
+
 data FileAssoc = FileAssoc { fileAssocId :: !Int,
                              fileAssocName :: !String,
                              fileAssocContents :: !ByteString,
-                             fileAssocMime :: !String }
+                             fileAssocMime :: !String,
+                             fileAssocType :: !Filetype }
 
 data App = App { appNextId :: !(TVar Int),
                  appGalleries :: !(TVar (Map Int FileAssoc)) }
@@ -75,3 +80,13 @@ getNextId state = do
         nextId <- readTVar tvar
         writeTVar tvar (nextId + 1)
         return nextId
+
+parseFiletype :: String -> Filetype
+parseFiletype mime =
+    case break (== '/') mime of
+      (_, "") -> FiletypeOther
+      (field, _) ->
+          case map toLower field of
+            "text" -> FiletypeText
+            "image" -> FiletypeImage
+            _ -> FiletypeOther

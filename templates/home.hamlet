@@ -3,13 +3,15 @@ $if null galleries
 $else
     <h2>Galleries
     <ul>
-        $forall (FileAssoc { fileAssocName = gallery, fileAssocId = faid }) <- galleries
+        $forall (FileAssoc { fileAssocName = gallery, fileAssocId = faid, fileAssocType = ft }) <- galleries
             <li>#{gallery}
                 <ul>
                     <li>
                         <a href=@{StatsR faid}>Text
                     <li>
                         <a href=@{RawR faid}>Raw
+                        $if ft == FiletypeImage
+                            <img src=@{RawR faid} width=50/>
                     <li>
                         <a href=@{DownR faid}>Download
 
